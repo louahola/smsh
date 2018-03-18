@@ -50,4 +50,4 @@ def create(target):
 
         return Instance(instance_id=instance_id)
     else:
-        raise NotImplementedError("{} did not match either an instance ID or instance IP pattern")
+        raise NotImplementedError("{} did not match either an instance ID or instance IP pattern".format(target))
