@@ -40,10 +40,11 @@ class Target(object):
         self.instance = instance
 
         self.name = None
-        for tag in self.instance["Tags"]:
-            if tag["Key"] == "Name":
-                self.name = tag["Value"]
-                break
+        if ("Tags" in self.instance):
+            for tag in self.instance["Tags"]:
+                if tag["Key"] == "Name":
+                    self.name = tag["Value"]
+                    break
         if not self.name:
             self.name = instance_id
 
