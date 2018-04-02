@@ -21,22 +21,22 @@ class BufferedCommandInvocation(CommandInvocation):
             " {cwd_return} &&"
             " {user_return}"
         ).format(
-            user_setup=self.__get_user_setup(),
-            environment_setup=self.__get_env_setup(),
+            user_setup=self._get_user_setup(),
+            environment_setup=self._get_env_setup(),
             command=command,
-            env_return=self.__get_env_return(),
-            cwd_return=self.__get_cwd_return(),
-            user_return=self.__get_user_return()
+            env_return=self._get_env_return(),
+            cwd_return=self._get_cwd_return(),
+            user_return=self._get_user_return()
         )
 
         self.invocation_id = target.send_command(self.session_context.get_cwd(), command)
 
-    def __get_user_setup(self):
+    def _get_user_setup(self):
         return "su - {user} >/dev/null 2>&1".format(
             user=self.session_context.get_user()
         )
 
-    def __get_env_setup(self):
+    def _get_env_setup(self):
         return ("source {sets} >/dev/null 2>&1 &&"
                 " set -a >/dev/null 2>&1 &&"
                 " source {exports} >/dev/null 2>&1 &&"
@@ -46,18 +46,18 @@ class BufferedCommandInvocation(CommandInvocation):
             exports=self.session_context.get_exports_file_path()
         )
 
-    def __get_env_return(self):
+    def _get_env_return(self):
         return "set > {} && env > {}".format(
             self.session_context.get_sets_file_path(),
             self.session_context.get_exports_file_path()
         )
 
     @staticmethod
-    def __get_cwd_return():
+    def _get_cwd_return():
         return "echo {{pwd:$(pwd)}}"
 
     @staticmethod
-    def __get_user_return():
+    def _get_user_return():
         return "echo {{whoami:$(whoami)}}"
 
     def wait(self):

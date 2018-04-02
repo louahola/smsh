@@ -48,16 +48,16 @@ class Target(object):
         if not self.name:
             self.name = instance_id
 
-        self.vpc_name = self.__get_vpc_name(self.instance.get("VpcId", ""))
+        self.vpc_name = self._get_vpc_name(self.instance.get("VpcId", ""))
         if not self.vpc_name:
             self.vpc_name = self.instance.get("VpcId", "")
 
-        self.subnet_name = self.__get_subnet_name(self.instance.get("SubnetId", ""))
+        self.subnet_name = self._get_subnet_name(self.instance.get("SubnetId", ""))
         if not self.subnet_name:
             self.subnet_name = self.instance.get("SubnetId", "")
 
     @staticmethod
-    def __get_vpc_name(vpc_id):
+    def _get_vpc_name(vpc_id):
         client = clients.EC2()
         resp = client.describe_vpcs(
             VpcIds=[vpc_id]
@@ -68,7 +68,7 @@ class Target(object):
                     return tag["Value"]
 
     @staticmethod
-    def __get_subnet_name(subnet_id):
+    def _get_subnet_name(subnet_id):
         client = clients.EC2()
         resp = client.describe_subnets(
             SubnetIds=[subnet_id]

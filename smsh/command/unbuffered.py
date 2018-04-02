@@ -28,36 +28,36 @@ class UnbufferedCommandInvocation(CommandInvocation):
             " {cwd_return} &&"
             " {user_return}"
         ).format(
-            user_setup=self.__get_user_setup(),
-            environment_setup=self.__get_env_setup(),
-            logging_setup=self.__get_logging_setup(),
-            command=self.__get_command_setup(command),
-            env_return=self.__get_env_return(),
-            cwd_return=self.__get_cwd_return(),
-            user_return=self.__get_user_return()
+            user_setup=self._get_user_setup(),
+            environment_setup=self._get_env_setup(),
+            logging_setup=self._get_logging_setup(),
+            command=self._get_command_setup(command),
+            env_return=self._get_env_return(),
+            cwd_return=self._get_cwd_return(),
+            user_return=self._get_user_return()
         )
 
         self.invocation_id = target.send_command(self.session_context.get_cwd(), command)
         self.output_invocation_id = None
 
-    def __get_log_path(self):
+    def _get_log_path(self):
         return "{}/{}".format(self.session_context.get_temp_dir(), self.LOG_FILENAME)
 
-    def __get_latest_log_path(self):
+    def _get_latest_log_path(self):
         return "{}/{}".format(self.session_context.get_temp_dir(), self.LATEST_LOG_FILENAME)
 
-    def __get_previous_log_line_path(self):
+    def _get_previous_log_line_path(self):
         return "{}/{}".format(self.session_context.get_temp_dir(), self.PREVIOUS_LOG_LINE_FILENAME)
 
-    def __get_output_buffer_path(self):
+    def _get_output_buffer_path(self):
         return "{}/{}".format(self.session_context.get_temp_dir(), self.OUTPUT_BUFFER_FILENAME)
 
-    def __get_user_setup(self):
+    def _get_user_setup(self):
         return "su - {user} >/dev/null 2>&1".format(
             user=self.session_context.get_user()
         )
 
-    def __get_env_setup(self):
+    def _get_env_setup(self):
         return ("source {sets} >/dev/null 2>&1 &&"
                 " set -a >/dev/null 2>&1 &&"
                 " source {exports} >/dev/null 2>&1 &&"
@@ -67,29 +67,29 @@ class UnbufferedCommandInvocation(CommandInvocation):
             exports=self.session_context.get_exports_file_path()
         )
 
-    def __get_logging_setup(self):
+    def _get_logging_setup(self):
         return "touch {} && echo 0 > {}".format(
-            self.__get_log_path(),
-            self.__get_previous_log_line_path()
+            self._get_log_path(),
+            self._get_previous_log_line_path()
         )
 
-    def __get_command_setup(self, command):
+    def _get_command_setup(self, command):
         return "{command}  >{log_file} 2>&1 || true".format(
             command=command,
-            log_file=self.__get_log_path()
+            log_file=self._get_log_path()
         )
 
-    def __get_env_return(self):
+    def _get_env_return(self):
         return "set > {} && env > {}".format(
             self.session_context.get_sets_file_path(),
             self.session_context.get_exports_file_path()
         )
 
-    def __get_cwd_return(self):
-        return "echo {{{{pwd:$(pwd)}}}} >> {log}".format(log=self.__get_log_path())
+    def _get_cwd_return(self):
+        return "echo {{{{pwd:$(pwd)}}}} >> {log}".format(log=self._get_log_path())
 
-    def __get_user_return(self):
-        return "echo {{{{whoami:$(whoami)}}}} >> {log}".format(log=self.__get_log_path())
+    def _get_user_return(self):
+        return "echo {{{{whoami:$(whoami)}}}} >> {log}".format(log=self._get_log_path())
 
     def wait(self):
         exit_cwd = None
@@ -125,10 +125,10 @@ class UnbufferedCommandInvocation(CommandInvocation):
             " head -n 100 {output_buffer} &&"
             " sed -i -e '1,100d' {output_buffer}"
         ).format(
-            log=self.__get_log_path(),
-            latest_log=self.__get_latest_log_path(),
-            previous_line=self.__get_previous_log_line_path(),
-            output_buffer=self.__get_output_buffer_path()
+            log=self._get_log_path(),
+            latest_log=self._get_latest_log_path(),
+            previous_line=self._get_previous_log_line_path(),
+            output_buffer=self._get_output_buffer_path()
         )
 
         self.output_invocation_id = self.target.send_command(self.session_context.get_cwd(), cmd)

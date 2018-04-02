@@ -12,7 +12,7 @@ class InvalidTargetException(Exception):
     pass
 
 
-def __get_instance_id(*, filter_name, filter_value):
+def _get_instance_id(*, filter_name, filter_value):
     instance_id = None
 
     client = clients.EC2()
@@ -36,12 +36,12 @@ def create(target):
     if INSTANCE_ID_PATTERN.match(target):
         return Instance(instance_id=target)
     elif IP_PATTERN.match(target):
-        instance_id = __get_instance_id(
+        instance_id = _get_instance_id(
             filter_name="private-ip-address",
             filter_value=target
         )
         if not instance_id:
-            instance_id = __get_instance_id(
+            instance_id = _get_instance_id(
                 filter_name="ip-address",
                 filter_value=target
             )
