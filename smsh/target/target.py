@@ -29,8 +29,8 @@ class Target(object):
         resp = client.describe_instances(
             InstanceIds=[instance_id]
         )
-        for reservation in resp.get("Reservations", []):
-            for i in reservation.get("Instances", []):
+        for reservation in resp.get('Reservations', []):
+            for i in reservation.get('Instances', []):
                 instance = i
                 break
 
@@ -40,21 +40,21 @@ class Target(object):
         self.instance = instance
 
         self.name = None
-        if ("Tags" in self.instance):
-            for tag in self.instance["Tags"]:
-                if tag["Key"] == "Name":
-                    self.name = tag["Value"]
+        if 'Tags' in self.instance:
+            for tag in self.instance['Tags']:
+                if tag['Key'] == 'Name':
+                    self.name = tag['Value']
                     break
         if not self.name:
             self.name = instance_id
 
-        self.vpc_name = self._get_vpc_name(self.instance.get("VpcId", ""))
+        self.vpc_name = self._get_vpc_name(self.instance.get('VpcId', ''))
         if not self.vpc_name:
-            self.vpc_name = self.instance.get("VpcId", "")
+            self.vpc_name = self.instance.get('VpcId', '')
 
-        self.subnet_name = self._get_subnet_name(self.instance.get("SubnetId", ""))
+        self.subnet_name = self._get_subnet_name(self.instance.get('SubnetId', ''))
         if not self.subnet_name:
-            self.subnet_name = self.instance.get("SubnetId", "")
+            self.subnet_name = self.instance.get('SubnetId', '')
 
     @staticmethod
     def _get_vpc_name(vpc_id):
@@ -62,10 +62,10 @@ class Target(object):
         resp = client.describe_vpcs(
             VpcIds=[vpc_id]
         )
-        for vpc in resp.get("Vpcs", []):
-            for tag in vpc.get("Tags", []):
-                if tag["Key"] == "Name":
-                    return tag["Value"]
+        for vpc in resp.get('Vpcs', []):
+            for tag in vpc.get('Tags', []):
+                if tag['Key'] == 'Name':
+                    return tag['Value']
 
     @staticmethod
     def _get_subnet_name(subnet_id):
@@ -73,13 +73,13 @@ class Target(object):
         resp = client.describe_subnets(
             SubnetIds=[subnet_id]
         )
-        for subnet in resp.get("Subnets", []):
-            for tag in subnet.get("Tags", []):
-                if tag["Key"] == "Name":
-                    return tag["Value"]
+        for subnet in resp.get('Subnets', []):
+            for tag in subnet.get('Tags', []):
+                if tag['Key'] == 'Name':
+                    return tag['Value']
 
     def get_instance_id(self):
-        return self.instance["InstanceId"]
+        return self.instance['InstanceId']
 
     def get_details(self):
         return (
@@ -100,18 +100,18 @@ class Target(object):
         ).format(
             instance_name=self.name,
             instance_id=self.get_instance_id(),
-            instance_type=self.instance.get("InstanceType", ""),
-            public_dns=self.instance.get("PublicDnsName", ""),
-            public_ip=self.instance.get("PublicIpAddress", ""),
-            private_dns=self.instance.get("PrivateDnsName", ""),
-            private_ip=self.instance.get("PrivateIpAddress", ""),
+            instance_type=self.instance.get('InstanceType', ''),
+            public_dns=self.instance.get('PublicDnsName', ''),
+            public_ip=self.instance.get('PublicIpAddress', ''),
+            private_dns=self.instance.get('PrivateDnsName', ''),
+            private_ip=self.instance.get('PrivateIpAddress', ''),
             subnet_name=self.subnet_name,
-            subnet_id=self.instance.get("SubnetId", ""),
+            subnet_id=self.instance.get('SubnetId', ''),
             vpc_name=self.vpc_name,
-            vpc_id=self.instance.get("VpcId", ""),
-            iam_role=self.instance.get("IamInstanceProfile", {}).get("Arn", ""),
-            launch_time=self.instance.get("LaunchTime", ""),
-            image_id=self.instance.get("ImageId", "")
+            vpc_id=self.instance.get('VpcId', ''),
+            iam_role=self.instance.get('IamInstanceProfile', {}).get('Arn', ''),
+            launch_time=self.instance.get('LaunchTime', ''),
+            image_id=self.instance.get('ImageId', '')
         )
 
     def send_command(self, wd, command):
@@ -121,8 +121,8 @@ class Target(object):
         polling_count = 1
 
         info = self.describe_command(command_id)
-        status = info["Status"]
-        while status == "Pending" or status == "InProgress":
+        status = info['Status']
+        while status == 'Pending' or status == 'InProgress':
             time_to_sleep = min(
                 (max(self.MIN_POLLING_INTERVAL, math.pow(self.INITIAL_POLLING_INTERVAL * 10, polling_count) / 10)),
                 self.MAX_POLLING_INTERVAL
@@ -132,15 +132,15 @@ class Target(object):
             polling_count += 1
 
             info = self.describe_command(command_id)
-            status = info["Status"]
+            status = info['Status']
 
-        if status == "Failed":
+        if status == 'Failed':
             raise CommandInvocationFailureException(
-                stdout=info["StandardOutputContent"],
-                stderr=info["StandardErrorContent"]
+                stdout=info['StandardOutputContent'],
+                stderr=info['StandardErrorContent']
             )
 
-        return info["StandardOutputContent"]
+        return info['StandardOutputContent']
 
     def describe_command(self, command_id):
         client = clients.SSM()
@@ -152,7 +152,7 @@ class Target(object):
                 )
                 return resp
             except ClientError as ex:
-                if ex.response["Error"]["Code"] == "InvocationDoesNotExist":
+                if ex.response['Error']['Code'] == 'InvocationDoesNotExist':
                     pass
                 else:
                     raise ex

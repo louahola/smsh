@@ -4,7 +4,8 @@ import logging
 
 import argparse
 
-from smsh.session import Session, SessionConfiguration
+from smsh.session import create as create_session
+from smsh.session.session import Session, SessionConfiguration
 from smsh.target import create as create_target
 
 
@@ -35,7 +36,6 @@ def main():
             environment_variables[key] = value
 
     configuration = SessionConfiguration(
-        command=args.command,
         environment_variables=environment_variables,
         user=args.user,
         working_directory=args.working_directory,
@@ -43,8 +43,9 @@ def main():
     )
 
     target = create_target(args.host)
+    session = create_session(configuration, target, args.command)
 
-    with Session(configuration=configuration, target=target) as session:
+    with session:
         session.start()
 
 

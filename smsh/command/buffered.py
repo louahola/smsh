@@ -7,6 +7,7 @@ from smsh.command.command import Command, CommandInvocation
 class BufferedCommandInvocation(CommandInvocation):
     CWD_REGEX = re.compile("\n?{{pwd:(\S+?)}}")
     USER_REGEX = re.compile("\n?{{whoami:(\S+?)}}")
+    TRAILING_NEWLINE = re.compile("\n?$")
 
     def __init__(self, *, command, session_context, target):
         CommandInvocation.__init__(self)
@@ -78,6 +79,8 @@ class BufferedCommandInvocation(CommandInvocation):
             self.session_context.set_user(exit_user)
         else:
             logging.error("No user found!")
+
+        output = re.sub(self.TRAILING_NEWLINE, "", output)
 
         if output:
             print(output)

@@ -29,8 +29,8 @@ class EditorCommandInvocation(CommandInvocation):
 
         self.invocation_id = None
 
-        with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
-            tf.write(input_contents.encode("utf-8"))
+        with tempfile.NamedTemporaryFile(suffix='.tmp') as tf:
+            tf.write(input_contents.encode('utf-8'))
             tf.flush()
 
             call([self.ide, "+set backupcopy=yes", tf.name])

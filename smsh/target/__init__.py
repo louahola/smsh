@@ -19,14 +19,14 @@ def _get_instance_id(*, filter_name, filter_value):
     resp = client.describe_instances(
         Filters=[
             {
-                "Name": filter_name,
-                "Values": [filter_value]
+                'Name': filter_name,
+                'Values': [filter_value]
             }
         ]
     )
-    for reservation in resp.get("Reservations", []):
-        for ec2_instance in reservation.get("Instances", []):
-            instance_id = ec2_instance["InstanceId"]
+    for reservation in resp.get('Reservations', []):
+        for ec2_instance in reservation.get('Instances', []):
+            instance_id = ec2_instance['InstanceId']
             break
 
     return instance_id
@@ -37,12 +37,12 @@ def create(target):
         return Instance(instance_id=target)
     elif IP_PATTERN.match(target):
         instance_id = _get_instance_id(
-            filter_name="private-ip-address",
+            filter_name='private-ip-address',
             filter_value=target
         )
         if not instance_id:
             instance_id = _get_instance_id(
-                filter_name="ip-address",
+                filter_name='ip-address',
                 filter_value=target
             )
         if not instance_id:

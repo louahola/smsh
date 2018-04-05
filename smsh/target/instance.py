@@ -3,8 +3,8 @@ from smsh import clients
 
 
 class Instance(Target):
-    DEFAULT_EXECUTION_TIMEOUT = "900"
-    DEFAULT_DOCUMENT = "AWS-RunShellScript"
+    DEFAULT_EXECUTION_TIMEOUT = '900'
+    DEFAULT_DOCUMENT = 'AWS-RunShellScript'
 
     def __init__(self, instance_id):
         Target.__init__(self, instance_id)
@@ -17,9 +17,9 @@ class Instance(Target):
             ],
             DocumentName=self.DEFAULT_DOCUMENT,
             Parameters={
-                "workingDirectory": [wd],
-                "commands": [command],
-                "executionTimeout": [self.DEFAULT_EXECUTION_TIMEOUT]
+                'workingDirectory': [wd],
+                'commands': [command],
+                'executionTimeout': [self.DEFAULT_EXECUTION_TIMEOUT]
             }
         )
-        return resp.get("Command", {}).get("CommandId")
+        return resp.get('Command', {}).get('CommandId')

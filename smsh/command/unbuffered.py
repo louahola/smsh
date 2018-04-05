@@ -9,10 +9,10 @@ class UnbufferedCommandInvocation(CommandInvocation):
     USER_REGEX = re.compile("\n?{{whoami:(\S+?)}}")
     TRAILING_NEWLINE = re.compile("\n?$")
 
-    LOG_FILENAME = "command.log"
-    LATEST_LOG_FILENAME = "latest.log"
-    PREVIOUS_LOG_LINE_FILENAME = "previous.line"
-    OUTPUT_BUFFER_FILENAME = "output.buffer"
+    LOG_FILENAME = 'command.log'
+    LATEST_LOG_FILENAME = 'latest.log'
+    PREVIOUS_LOG_LINE_FILENAME = 'previous.line'
+    OUTPUT_BUFFER_FILENAME = 'output.buffer'
 
     def __init__(self, *, command, session_context, target):
         CommandInvocation.__init__(self)
