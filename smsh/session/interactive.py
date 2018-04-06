@@ -1,3 +1,18 @@
+# Copyright (C) Lou Ahola, HashChain Technology, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import logging
 import os
 
@@ -8,6 +23,12 @@ from smsh.session.session import Session
 
 
 class InteractiveSession(Session):
+    LICENSE_STATEMENT = """Copyright (C) 2018 Lou Ahola, HashChain Technology, Inc.
+
+This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+This is free software, and you are welcome to redistribute it
+under certain conditions; type `show c' for details. """
+
     def __init__(self, *, configuration, target):
         Session.__init__(self, configuration=configuration, target=target)
 
@@ -26,11 +47,12 @@ class InteractiveSession(Session):
             target=self.target
         )
 
+        print(self.LICENSE_STATEMENT)
+        print("\nUser Arn: {}\n\n{}\n".format(self.iam_arn, self.target.get_details()))
+
         self.invocation.wait()
         self.invocation.clear()
         self.invocation = None
-
-        print("\nUser Arn: {}\n\n{}\n".format(self.iam_arn, self.target.get_details()))
 
         return self
 
@@ -50,10 +72,11 @@ class InteractiveSession(Session):
                             session_context=self.session_context,
                             target=self.target
                         )
-                        self.invocation.wait()
+                        if self.invocation:
+                            self.invocation.wait()
 
-                        self.invocation.clear()
-                        self.invocation = None
+                            self.invocation.clear()
+                            self.invocation = None
                     except (KeyboardInterrupt, SystemExit):
                         self.invocation.cancel()
                         self.invocation = None
