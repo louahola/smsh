@@ -49,7 +49,9 @@ setup(
     version=find_version('smsh', '__init__.py'),
 
     description='SSH-like Shell via AWS SSM',
+
     long_description=long_description,
+    long_description_content_type='text/markdown',
 
     author='Lou Ahola',
     author_email='lou@hashchain.ca',
