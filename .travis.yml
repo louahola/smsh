@@ -1,0 +1,17 @@
+language: python
+python:
+- '2.7'
+- '3.3'
+- '3.4'
+- '3.5'
+- '3.6'
+install:
+- python setup.py install
+deploy:
+  provider: pypi
+  user: smsh
+  password:
+    secure: GBcTAobAbKykqxry6Mr8y7gTktJgUkcU6WRLLs3sqAFa7OBWAA9ck+d/HZOf7+1i/lnR3DIEjevchtiFxiTHzK4lTKOfzztP6uMKLni7egfF0BZI8a7vl+7repbsLSdaq4ikXLuJCDKFNmJQ7r1m+KLczN0F6YWEjBPZ7b0Fw/ArZ9+YNv3U4rIqXwYR4B+T97qKosDFmge18JRFRWY/VS+VwjdBgWYlSeDJaBzcyd8XOh8E6LtZt0FnoXAK1QZU5KVNb3QA+uGi3bYW/a5RP4uT94xwLAuLUbAEzWntz4Y+N4Q3oab9IWqaYJFgbdllxZZ37fUIK2p2P8lsd7gPAcNOkinjl8HlrG/C7jyT3O4Zh/M6phOAqvAaeNtLcOwWOzqInrLdswV0AzD/0lSdHdrB9rc7Ytvu3bND3zW3r4SWsceCxMSodw2YfmKd0XFhRcswW5F7eY6wtbqDzdI+GLBi0BsDWuRvv/zKcTxqVMx8c+6gXz4e89ZzP14sCg6SYFwn+C6fnywGo6q8G3D4O6Aq512Y4njoNIbO6QOsvx4RQaKf1KheUXVgrdo6+3ofIkCdsz9n02j5XuHBqFFQKWh3aNX0JzA3HBoL4UwvT5MeJIeqts+GbAMCCsz7NXegK0lkhIZ0BRROwj0niPFGw3FDHwNUIP6jaTghnOSc7qQ=
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
