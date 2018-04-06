@@ -27,9 +27,6 @@ requires = [
     'boto3'
 ]
 
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
-
 
 def read(*parts):
     return codecs.open(os.path.join(here, *parts), 'r').read()
