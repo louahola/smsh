@@ -29,7 +29,7 @@ This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
 This is free software, and you are welcome to redistribute it
 under certain conditions; type `show c' for details. """
 
-    def __init__(self, *, configuration, target):
+    def __init__(self, configuration, target):
         Session.__init__(self, configuration=configuration, target=target)
 
     def __enter__(self):

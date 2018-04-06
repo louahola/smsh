@@ -19,7 +19,7 @@ from smsh import clients
 
 
 class SessionConfiguration(object):
-    def __init__(self, *, buffered_output, environment_variables, user, working_directory):
+    def __init__(self, buffered_output, environment_variables, user, working_directory):
         self.buffered_output = buffered_output
         self.environment_variables = environment_variables
         self.user = user
@@ -30,7 +30,7 @@ class SessionContext(object):
     EXPORTS_FILE_NAME = 'exports'
     SETS_FILE_NAME = 'sets'
 
-    def __init__(self, *, temp_dir, user='root', working_directory):
+    def __init__(self, temp_dir, user, working_directory):
         self.__temp_dir = temp_dir
         self.__user = user
         self.__cwd = working_directory
@@ -58,7 +58,7 @@ class SessionContext(object):
 
 
 class Session(object):
-    def __init__(self, *, configuration, target):
+    def __init__(self, configuration, target):
         self.buffered_output = configuration.buffered_output
 
         self.target = target
@@ -71,6 +71,7 @@ class Session(object):
 
         self.session_context = SessionContext(
             temp_dir="/tmp/smsh/{}".format(self.session_id),
+            user=configuration.user,
             working_directory=configuration.working_directory
         )
 

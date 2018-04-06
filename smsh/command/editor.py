@@ -22,7 +22,7 @@ from smsh.target.target import CommandInvocationFailureException
 
 
 class EditorCommandInvocation(CommandInvocation):
-    def __init__(self, *, file, ide, session_context, target):
+    def __init__(self, file, ide, session_context, target):
         CommandInvocation.__init__(self)
         self.file = file
         self.ide = ide
@@ -78,11 +78,11 @@ class EditorCommandInvocation(CommandInvocation):
 
 
 class EditorCommand(Command):
-    def __init__(self, *, ide, file):
+    def __init__(self, ide, file):
         self.ide = ide
         self.file = file
 
-    def invoke(self, *, session_context, target):
+    def invoke(self, session_context, target):
         return EditorCommandInvocation(
             file=self.file,
             ide=self.ide,

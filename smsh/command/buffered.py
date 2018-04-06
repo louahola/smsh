@@ -24,7 +24,7 @@ class BufferedCommandInvocation(CommandInvocation):
     USER_REGEX = re.compile("\n?{{whoami:(\S+?)}}")
     TRAILING_NEWLINE = re.compile("\n?$")
 
-    def __init__(self, *, command, session_context, target):
+    def __init__(self, command, session_context, target):
         CommandInvocation.__init__(self)
         self.session_context = session_context
         self.target = target
@@ -112,7 +112,7 @@ class BufferedCommand(Command):
     def __init__(self, command):
         self.command = command
 
-    def invoke(self, *, session_context, target):
+    def invoke(self, session_context, target):
         return BufferedCommandInvocation(
             command=self.command,
             session_context=session_context,

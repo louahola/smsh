@@ -25,7 +25,7 @@ CMD_EDITOR_PATTERN = re.compile("^(vi|vim|nano) \S+")
 LICENSE_PATTERN = re.compile("^smsh\-license")
 
 
-def create(*, command, buffered_output):
+def create(command, buffered_output):
     if CMD_EXIT_PATTERN.match(command.lower()):
         command = ExitCommand()
     elif CMD_EDITOR_PATTERN.match(command.lower()):

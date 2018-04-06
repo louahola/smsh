@@ -15,7 +15,7 @@
 
 
 class Command(object):
-    def invoke(self, *, session_context, target):
+    def invoke(self, session_context, target):
         raise NotImplementedError("Overwrite This Method!")
 
 

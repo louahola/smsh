@@ -22,7 +22,7 @@ from smsh.session.session import Session
 
 
 class EphemeralSession(Session):
-    def __init__(self, *, configuration, target, command):
+    def __init__(self, command, configuration, target):
         Session.__init__(self, configuration=configuration, target=target)
         self.command = command
 

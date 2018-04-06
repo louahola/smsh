@@ -29,7 +29,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
     PREVIOUS_LOG_LINE_FILENAME = 'previous.line'
     OUTPUT_BUFFER_FILENAME = 'output.buffer'
 
-    def __init__(self, *, command, session_context, target):
+    def __init__(self, command, session_context, target):
         CommandInvocation.__init__(self)
         self.session_context = session_context
         self.target = target
@@ -166,7 +166,7 @@ class UnbufferedCommand(Command):
     def __init__(self, command):
         self.command = command
 
-    def invoke(self, *, session_context, target):
+    def invoke(self, session_context, target):
         return UnbufferedCommandInvocation(
             command=self.command,
             session_context=session_context,

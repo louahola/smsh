@@ -56,7 +56,11 @@ def main():
     )
 
     target = create_target(args.host)
-    session = create_session(configuration, target, args.command)
+    session = create_session(
+        command=args.command,
+        configuration=configuration,
+        target=target
+    )
 
     with session:
         session.start()

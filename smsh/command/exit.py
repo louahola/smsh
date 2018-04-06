@@ -21,5 +21,5 @@ class UserInitiatedExit(Exception):
 
 
 class ExitCommand(Command):
-    def invoke(self, *, session_context, target):
+    def invoke(self, session_context, target):
         raise UserInitiatedExit()
