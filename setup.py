@@ -50,14 +50,14 @@ setup(
 
     description='SSH-like Shell via AWS SSM',
 
-    long_description=long_description,
+    long_description=read('README.md'),
     long_description_content_type='text/markdown',
 
     author='Lou Ahola',
     author_email='lou@hashchain.ca',
     url='http://github.com/node40/smsh',
 
-    packages=find_packages(exclude=['test*']),
+    packages=find_packages(exclude=['tests*']),
     install_requires=requires,
 
     license="GNU General Public License v3.0",
@@ -68,6 +68,10 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6'
     ],
+
+    test_suite='nose.collector',
+    tests_require=['nose'],
+
     entry_points={
         'console_scripts': [
             'smsh=smsh.__main__:main'
