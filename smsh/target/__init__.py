@@ -27,7 +27,7 @@ class InvalidTargetException(Exception):
     pass
 
 
-def _get_instance_id(*, filter_name, filter_value):
+def _get_instance_id(filter_name, filter_value):
     instance_id = None
 
     client = clients.EC2()
