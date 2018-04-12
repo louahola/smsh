@@ -89,7 +89,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
         )
 
     def _get_command_setup(self, command):
-        return "{command}  >{log_file} 2>&1 || true".format(
+        return "{{ {command}; }}  >{log_file} 2>&1 || true".format(
             command=command,
             log_file=self._get_log_path()
         )
