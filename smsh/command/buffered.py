@@ -32,7 +32,7 @@ class BufferedCommandInvocation(CommandInvocation):
         command = (
             # "{user_setup} &&"
             # " {environment_setup} &&"
-            " {command} &&"
+            " {{ {command}; }} &&"
             # " {env_return} &&"
             " {cwd_return} &&"
             " {user_return}"
