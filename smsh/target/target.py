@@ -42,7 +42,13 @@ class Target(object):
 
         client = clients.EC2()
         resp = client.describe_instances(
-            InstanceIds=[instance_id]
+            InstanceIds=[instance_id],
+            Filters=[
+                {
+                    'Name': 'instance-state-name',
+                    'Values': ['pending', 'running', 'stopping', 'shutting-down']
+                }
+            ]
         )
         for reservation in resp.get('Reservations', []):
             for i in reservation.get('Instances', []):
