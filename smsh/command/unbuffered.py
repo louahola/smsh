@@ -133,12 +133,12 @@ class UnbufferedCommandInvocation(CommandInvocation):
 
     def get_output(self):
         cmd = (
-            "cp {log} {latest_log} &&"
+            "if [ -e \"{log}\" ]; then cp {log} {latest_log} &&"
             " tail -n $(expr $(cat {latest_log} | wc -l) - $(cat {previous_line})) {latest_log} >> {output_buffer} &&"
             " echo $(cat {latest_log} | wc -l) > {previous_line} &&"
             " rm {latest_log} &&"
             " head -n 100 {output_buffer} &&"
-            " sed -i -e '1,100d' {output_buffer}"
+            " sed -i -e '1,100d' {output_buffer}; fi"
         ).format(
             log=self._get_log_path(),
             latest_log=self._get_latest_log_path(),
