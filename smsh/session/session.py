@@ -31,30 +31,37 @@ class SessionContext(object):
     SETS_FILE_NAME = 'sets'
 
     def __init__(self, temp_dir, user, working_directory):
-        self.__temp_dir = temp_dir
-        self.__user = user
-        self.__cwd = working_directory
+        self._temp_dir = temp_dir
+        self._user = user
+        self._cwd = working_directory
+        self._exit_code = 0
 
     def get_cwd(self):
-        return self.__cwd
+        return self._cwd
 
     def set_cwd(self, cwd):
-        self.__cwd = cwd
+        self._cwd = cwd
+
+    def get_exit_code(self):
+        return self._exit_code
+
+    def set_exit_code(self, exit_code):
+        self._exit_code = exit_code
 
     def get_temp_dir(self):
-        return self.__temp_dir
+        return self._temp_dir
 
     def get_sets_file_path(self):
-        return "{}/{}".format(self.__temp_dir, self.SETS_FILE_NAME)
+        return "{}/{}".format(self._temp_dir, self.SETS_FILE_NAME)
 
     def get_exports_file_path(self):
-        return "{}/{}".format(self.__temp_dir, self.EXPORTS_FILE_NAME)
+        return "{}/{}".format(self._temp_dir, self.EXPORTS_FILE_NAME)
 
     def get_user(self):
-        return self.__user
+        return self._user
 
     def set_user(self, user):
-        self.__user = user
+        self._user = user
 
 
 class Session(object):

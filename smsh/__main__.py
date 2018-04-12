@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import sys
 
 import argparse
 
@@ -66,6 +67,7 @@ def main():
 
     with session:
         session.start()
+    sys.exit(int(session.session_context.get_exit_code()))
 
 
 if __name__ == '__main__':
