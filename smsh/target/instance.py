@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from smsh.target.target import Target
 from smsh import clients
 
@@ -25,6 +27,7 @@ class Instance(Target):
         Target.__init__(self, instance_id)
 
     def send_command(self, wd, command):
+        logging.debug("Sending command {} to instance {}".format(command, self.get_instance_id()))
         client = clients.SSM()
         resp = client.send_command(
             InstanceIds=[
