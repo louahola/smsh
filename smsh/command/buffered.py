@@ -21,6 +21,7 @@ from smsh.command.command import Command, CommandInvocation
 
 class BufferedCommandInvocation(CommandInvocation):
     CWD_REGEX = re.compile("\n?{{pwd:(\S+?)}}")
+    EXIT_CODE_REGEX = re.compile("\n?{{exit_code:(\S+?)}}")
     USER_REGEX = re.compile("\n?{{whoami:(\S+?)}}")
     TRAILING_NEWLINE = re.compile("\n?$")
 
@@ -32,7 +33,7 @@ class BufferedCommandInvocation(CommandInvocation):
         command = (
             # "{user_setup} &&"
             # " {environment_setup} &&"
-            " {{ {command}; }} &&"
+            " {{ {command}; echo {{{{exit_code:$?}}}}; }} 2>&1 || true &&"
             # " {env_return} &&"
             " {cwd_return} &&"
             " {user_return}"
@@ -86,6 +87,14 @@ class BufferedCommandInvocation(CommandInvocation):
             self.session_context.set_cwd(exit_cwd)
         else:
             logging.error("No working directory found!")
+
+        matches = re.search(self.EXIT_CODE_REGEX, output)
+        if matches:
+            exit_code = matches.group(1)
+            output = re.sub(self.EXIT_CODE_REGEX, "", output)
+            self.session_context.set_exit_code(exit_code)
+        else:
+            logging.error("No exit code found!")
 
         matches = re.search(self.USER_REGEX, output)
         if matches:

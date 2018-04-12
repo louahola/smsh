@@ -21,6 +21,7 @@ from smsh.command.command import CommandInvocation
 
 class UnbufferedCommandInvocation(CommandInvocation):
     CWD_REGEX = re.compile("\n?{{pwd:(\S+?)}}")
+    EXIT_CODE_REGEX = re.compile("\n?{{exit_code:(\S+?)}}")
     USER_REGEX = re.compile("\n?{{whoami:(\S+?)}}")
     TRAILING_NEWLINE = re.compile("\n?$")
 
@@ -89,7 +90,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
         )
 
     def _get_command_setup(self, command):
-        return "{{ {command}; }}  >{log_file} 2>&1 || true".format(
+        return "{{ {command}; echo {{{{exit_code:$?}}}}; }} >{log_file} 2>&1 || true".format(
             command=command,
             log_file=self._get_log_path()
         )
@@ -108,17 +109,22 @@ class UnbufferedCommandInvocation(CommandInvocation):
 
     def wait(self):
         exit_cwd = None
+        exit_code = None
         exit_user = None
 
-        while not exit_cwd or not exit_user:
+        while not exit_cwd or not exit_code or not exit_user:
             output = self.get_output()
 
             cwd_matches = re.search(self.CWD_REGEX, output)
+            exit_code_matches = re.search(self.EXIT_CODE_REGEX, output)
             user_matches = re.search(self.USER_REGEX, output)
 
             if cwd_matches:
                 exit_cwd = cwd_matches.group(1)
                 output = re.sub(self.CWD_REGEX, "", output)
+            if exit_code_matches:
+                exit_code = exit_code_matches.group(1)
+                output = re.sub(self.EXIT_CODE_REGEX, "", output)
             if user_matches:
                 exit_user = user_matches.group(1)
                 output = re.sub(self.USER_REGEX, "", output)
@@ -130,6 +136,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
 
         self.session_context.set_cwd(exit_cwd)
         self.session_context.set_user(exit_user)
+        self.session_context.set_exit_code(exit_code)
 
     def get_output(self):
         cmd = (
