@@ -27,24 +27,7 @@ class EphemeralSession(Session):
         self.command = command
 
     def __enter__(self):
-        logging.debug("creating temporary directory {}".format(self.session_context.get_temp_dir()))
-        command = create_command(
-            command="mkdir -p {temp_dir} >/dev/null && touch {sets} >/dev/null && touch {exports} >/dev/null".format(
-                temp_dir=self.session_context.get_temp_dir(),
-                sets=self.session_context.get_sets_file_path(),
-                exports=self.session_context.get_exports_file_path()
-            ),
-            buffered_output=True
-        )
-        self.invocation = command.invoke(
-            session_context=self.session_context,
-            target=self.target
-        )
-
-        self.invocation.wait()
-        self.invocation.clear()
         self.invocation = None
-
         return self
 
     def start(self):

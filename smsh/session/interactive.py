@@ -33,7 +33,7 @@ under certain conditions; type `show c' for details. """
         Session.__init__(self, configuration=configuration, target=target)
 
     def __enter__(self):
-        logging.debug("creating temporary directory {}".format(self.session_context.get_temp_dir()))
+        logging.debug("connecting to instance {}".format(self.session_context.get_temp_dir()))
         command = create_command(
             command="mkdir -p {temp_dir} && touch {sets} && touch {exports} && cat /etc/motd".format(
                 temp_dir=self.session_context.get_temp_dir(),

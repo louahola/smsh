@@ -31,6 +31,7 @@ class BufferedCommandInvocation(CommandInvocation):
         self.target = target
 
         command = (
+            "{directory_setup} &&"
             # "{user_setup} &&"
             # " {environment_setup} &&"
             " {{ {command}; echo {{{{exit_code:$?}}}}; }} 2>&1 || true &&"
@@ -38,6 +39,7 @@ class BufferedCommandInvocation(CommandInvocation):
             " {cwd_return} &&"
             " {user_return}"
         ).format(
+            directory_setup=self._get_directory_setup(),
             user_setup=self._get_user_setup(),
             environment_setup=self._get_env_setup(),
             command=command,
@@ -47,6 +49,13 @@ class BufferedCommandInvocation(CommandInvocation):
         )
 
         self.invocation_id = target.send_command(self.session_context.get_cwd(), command)
+
+    def _get_directory_setup(self):
+        return "mkdir -p {temp_dir} && touch {sets} && touch {exports}".format(
+            temp_dir=self.session_context.get_temp_dir(),
+            sets=self.session_context.get_sets_file_path(),
+            exports=self.session_context.get_exports_file_path()
+        )
 
     def _get_user_setup(self):
         return "su - {user} >/dev/null 2>&1".format(
