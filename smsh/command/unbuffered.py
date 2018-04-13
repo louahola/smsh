@@ -36,6 +36,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
         self.target = target
 
         command = (
+            "{directory_setup} &&"
             # "{user_setup} &&"
             # " {environment_setup} &&"
             " {logging_setup} &&"
@@ -44,6 +45,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
             " {cwd_return} &&"
             " {user_return}"
         ).format(
+            directory_setup=self._get_directory_setup(),
             user_setup=self._get_user_setup(),
             environment_setup=self._get_env_setup(),
             logging_setup=self._get_logging_setup(),
@@ -67,6 +69,13 @@ class UnbufferedCommandInvocation(CommandInvocation):
 
     def _get_output_buffer_path(self):
         return "{}/{}".format(self.session_context.get_temp_dir(), self.OUTPUT_BUFFER_FILENAME)
+
+    def _get_directory_setup(self):
+        return "mkdir -p {temp_dir} && touch {sets} && touch {exports}".format(
+            temp_dir=self.session_context.get_temp_dir(),
+            sets=self.session_context.get_sets_file_path(),
+            exports=self.session_context.get_exports_file_path()
+        )
 
     def _get_user_setup(self):
         return "su - {user} >/dev/null 2>&1".format(
