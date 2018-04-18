@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import re
 
 from smsh.command.command import Command
@@ -141,7 +142,7 @@ class UnbufferedCommandInvocation(CommandInvocation):
             output = re.sub(self.TRAILING_NEWLINE, "", output)
 
             if output:
-                print(output)
+                logging.getLogger('command_output').info(output)
 
         self.session_context.set_cwd(exit_cwd)
         self.session_context.set_user(exit_user)
