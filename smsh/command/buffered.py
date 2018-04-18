@@ -116,7 +116,7 @@ class BufferedCommandInvocation(CommandInvocation):
         output = re.sub(self.TRAILING_NEWLINE, "", output)
 
         if output:
-            print(output)
+            logging.getLogger('command_output').info(output)
 
     def cancel(self):
         self.target.cancel_command(self.invocation_id)
