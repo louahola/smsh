@@ -40,10 +40,20 @@ def main():
     parser.add_argument('--buffered-output', action='store_true', default=False)
     args = parser.parse_args()
 
+    # logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', datefmt='%m/%d/%Y %I:%M:%S')
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
         logging.getLogger('boto').setLevel(logging.CRITICAL)
         logging.getLogger('botocore').setLevel(logging.CRITICAL)
+
+    logger = logging.getLogger('command_output')
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(message)s')
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
 
     environment_variables = {}
     if args.env:

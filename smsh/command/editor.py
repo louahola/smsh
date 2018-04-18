@@ -63,7 +63,7 @@ class EditorCommandInvocation(CommandInvocation):
             )
             output = self.target.wait_for_output(self.invocation_id)
             if output:
-                print(output)
+                logging.getLogger('command_output').info(output)
 
         self.clear()
 
