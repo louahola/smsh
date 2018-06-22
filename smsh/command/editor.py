@@ -57,9 +57,19 @@ class EditorCommandInvocation(CommandInvocation):
         logging.debug("output contents: {}".format(output_contents))
         if input_contents != output_contents:
             logging.debug("file changes found. updating file")
+            command = (
+                "(\n"
+                "cat <<'--EOF--'\n"
+                "{contents}\n"
+                "--EOF--\n"
+                ") > {destination}"
+            ).format(
+                contents=output_contents,
+                destination=self.file
+            )
             self.invocation_id = self.target.send_command(
                 self.session_context.get_cwd(),
-                "printf -- '{}' > {}".format(output_contents, self.file)
+                command
             )
             output = self.target.wait_for_output(self.invocation_id)
             if output:
