@@ -1,4 +1,4 @@
-# Copyright (C) Lou Ahola, HashChain Technology, Inc.
+# Copyright (C) Lou Ahola, NODE40
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ from smsh.session.session import Session
 
 
 class InteractiveSession(Session):
-    LICENSE_STATEMENT = """Copyright (C) 2018 Lou Ahola, HashChain Technology, Inc.
+    LICENSE_STATEMENT = """Copyright (C) 2018 Lou Ahola, NODE40
 
 This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
 This is free software, and you are welcome to redistribute it
